@@ -116,11 +116,18 @@ export const getProfile=async(req:Request,res:Response)=>{
         }
         const sessionData=await userService.getProfile(userId)
         if(!sessionData){
-            return res.status(400).json({
+            return res.status(401).json({
                 message:"authorization error"
             })
         }
-        return sessionData
+        return res.status(201).json({
+            user: {
+                id: sessionData._id,
+                username: sessionData.username,
+                email: sessionData.email,
+                lastPosition: sessionData.lastPosition
+            }
+        })
     } catch (error) {
         console.log(error)
         return res.status(501).json({
